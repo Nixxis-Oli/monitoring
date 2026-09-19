@@ -200,3 +200,8 @@
 		font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 	}
 }
+
+/* Default sidebar width when the pre-paint script cannot run. */
+:root {
+	--sidebar-width: 288px;
+}
