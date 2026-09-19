@@ -31,12 +31,12 @@
 	</div>
 
 	<div class="grid gap-6 lg:grid-cols-3">
-		<div class="bg-card space-y-4 rounded-xl border p-5 lg:col-span-2">
+		<div class="bg-card min-w-0 space-y-4 rounded-xl border p-5 lg:col-span-2">
 			<LineChart data={week} />
 			<DataTable data={week} />
 		</div>
 
-		<div class="bg-card rounded-xl border p-5">
+		<div class="bg-card min-w-0 rounded-xl border p-5">
 			<BarChart data={outcomes} />
 		</div>
 	</div>

@@ -15,14 +15,20 @@
 		{ key: 'escalated' as const, label: 'Escalated', color: 'var(--series-2)' }
 	];
 
-	const PAD = { top: 16, right: 56, bottom: 28, left: 44 };
+	const PAD = { top: 16, bottom: 28, left: 44 };
+	const NARROW = 420;
 	const HEIGHT = 240;
 
-	let width = $state(720);
+	// Deliberately phone-sized: the server renders before clientWidth is
+	// measured, and a wide default would overflow until hydration.
+	let width = $state(320);
 	let hovered = $state<number | null>(null);
 
 	const max = $derived(Math.max(...data.map((d) => Math.max(d.handled, d.escalated))) * 1.1);
-	const plotWidth = $derived(Math.max(120, width - PAD.left - PAD.right));
+	// End labels need room on the right; below NARROW they are dropped and the
+	// plot takes the space back.
+	const padRight = $derived(width < NARROW ? 12 : 56);
+	const plotWidth = $derived(Math.max(80, width - PAD.left - padRight));
 	const plotHeight = HEIGHT - PAD.top - PAD.bottom;
 
 	const x = (index: number) =>
@@ -62,8 +68,12 @@
 		</ul>
 	</figcaption>
 
-	<div class="relative" bind:clientWidth={width}>
-		<svg {width} height={HEIGHT} role="img" aria-label="Conversations handled and escalated per day">
+	<div class="relative min-w-0" bind:clientWidth={width}>
+		<svg
+			{width}
+			height={HEIGHT}
+			class="block h-auto max-w-full"
+			role="img" aria-label="Conversations handled and escalated per day">
 			{#each ticks as tick (tick)}
 				<line
 					x1={PAD.left}
@@ -103,16 +113,19 @@
 			{#each SERIES as series (series.key)}
 				<path d={path(series.key)} fill="none" stroke={series.color} stroke-width="2" stroke-linejoin="round" />
 
-				<!-- Direct label at the end of each line: the second identity channel,
-					 and the contrast relief the light-mode palette requires. -->
-				<text
-					x={x(data.length - 1) + 8}
-					y={y(data[data.length - 1][series.key]) + 4}
-					class="text-[10px] font-medium"
-					fill={series.color}
-				>
-					{series.label}
-				</text>
+				<!-- Direct label at the end of each line: the second identity channel.
+					 Dropped when there is no room - the legend above and the table view
+					 below still carry identity and the contrast relief. -->
+				{#if width >= NARROW}
+					<text
+						x={x(data.length - 1) + 8}
+						y={y(data[data.length - 1][series.key]) + 4}
+						class="text-[10px] font-medium"
+						fill={series.color}
+					>
+						{series.label}
+					</text>
+				{/if}
 
 				{#if hovered !== null}
 					<circle
