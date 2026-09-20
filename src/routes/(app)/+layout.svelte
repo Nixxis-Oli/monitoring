@@ -83,7 +83,10 @@
 								? 'bg-primary text-primary-foreground font-medium'
 								: 'hover:bg-accent hover:text-accent-foreground'}"
 						>
-							<span class="truncate">{item.label}</span>
+							<span class="flex min-w-0 items-center gap-3">
+								<item.icon class="size-4 shrink-0" />
+								<span class="truncate">{item.label}</span>
+							</span>
 							{#if !item.ready}
 								<span
 									class="bg-muted text-muted-foreground shrink-0 rounded-full px-1.5 text-[10px]"
