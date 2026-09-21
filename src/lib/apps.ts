@@ -3,7 +3,12 @@ import {
 	PUBLIC_APP_MONITORING,
 	PUBLIC_APP_ORGANIZATION
 } from '$env/static/public';
-import type { AppEntry, OrganizationEntry, PaletteOption } from '@nixxis-oli/ui';
+import type {
+	AppEntry,
+	OrganizationEntry,
+	PaletteOption,
+	UserSummary
+} from '@nixxis-oli/ui';
 
 // Every application declares the same catalogue. In production this would come
 // from one endpoint; duplicating it here is what proves the shared toolbar does
@@ -69,6 +74,15 @@ export const organizations: OrganizationEntry[] = [
 ];
 
 export const currentOrganizationId = 'acme';
+
+// The signed-in account. Same story as the catalogue above: one endpoint per
+// signed-in user in a real deployment. Declared identically in every
+// application so the avatar in the shared menu does not change as you move
+// between them.
+export const currentUser: UserSummary = {
+	name: 'Olivier Lambert',
+	email: 'o.lambert@nixxis.com'
+};
 
 // The package stamps data-palette; app.css decides what each one means.
 export const palettes: PaletteOption[] = [
